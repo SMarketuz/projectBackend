@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Product</title>
+    <style>
+        /* Add your custom CSS styles here */
+    </style>
+</head>
+<body>
+    <h1>Update Product</h1>
+    <form id="productForm">
+        <label for="productId">Product ID:</label>
+        <input type="number" id="productId" name="productId"><br><br>
+        
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" ><br><br>
+        
+        <label for="desc">Description:</label>
+        <textarea id="desc" name="desc" rows="4" ></textarea><br><br>
+        
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price" ><br><br>
+        
+        <label for="oldPrice">Old Price:</label>
+        <input type="text" id="oldPrice" name="oldPrice" ><br><br>
+        
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" accept="image/*"><br><br>
+        
+        <button type="submit">Update Product</button>
+    </form>
+
+    <script>
+        document.getElementById('productForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const productId = formData.get('productId');
+            formData.delete('productId'); 
+            formData.delete('image'); 
+
+            const productData = {};
+            
+            // Iterate through form data and add non-empty values to the productData object
+            for (const [key, value] of formData.entries()) {
+                if (value) {
+                    productData[key] = value;
+                }
+            }
+
+            const jsonData = JSON.stringify(productData);
+
+            console.log(jsonData);
+            
+            fetch(`https://containersbackend.onrender.com/api/product/update/${productId}`, {
+                method: 'PATCH',
+                body: jsonData,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            
+            this.reset();
+        });
+    </script>
+</body>
+</html>
