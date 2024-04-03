@@ -6,7 +6,7 @@
   "scripts": {
     "vercel-build": "prisma generate && npx prisma migrate dev --name complate",
     "dev": "nodemon ./src/app.js",
-    "start": "node ./src/app"
+    "start": "node ./src/app.js"
   },
   "keywords": [],
   "author": "",
